@@ -148,7 +148,7 @@ class _FirstMenuState extends State<FirstMenu> {
   String mess = "no food";
   Future<void> getData() async {
     try {
-      final response = await dio.get('http://10.0.2.2:3000/api/data');
+      final response = await dio.get('https://api-new-xvht.onrender.com/api/data');
       setState(() {
         items = response.data['data'];
       });
@@ -192,7 +192,7 @@ class _secondMenuState extends State<secondMenu> {
   String mess = "no food";
   Future<void> getData() async {
     try {
-      final response = await dio.get('http://10.0.2.2:3000/api/data');
+      final response = await dio.get('https://api-new-xvht.onrender.com/api/data');
       setState(() {
         items = response.data['restaurant'];
       });

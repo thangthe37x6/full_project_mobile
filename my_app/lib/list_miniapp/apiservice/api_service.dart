@@ -5,7 +5,7 @@ import 'user.dart';
 import 'notifi.dart';
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://10.0.2.2:3000/api/")
+@RestApi(baseUrl: "https://api-new-xvht.onrender.com/api/")
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 

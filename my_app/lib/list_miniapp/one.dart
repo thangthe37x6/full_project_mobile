@@ -29,7 +29,7 @@ class _login extends State<login> {
     authService = ApiClient(dio);
   }
 
-  String message = "";
+  String message = " ";
   Future<void> login() async {
     try {
       final response = await authService.login(User(
@@ -40,6 +40,7 @@ class _login extends State<login> {
       setState(() {
         message = response.data['message'];
         if (message == 'done') {
+          message = " ";
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => homemain()));
         }
