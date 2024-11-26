@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/list_miniapp/one.dart';
 import 'four.dart';
 import 'profile.dart';
+import 'four.dart';
 
 class homemain extends StatefulWidget {
   const homemain({super.key});
@@ -14,12 +15,14 @@ class homemain extends StatefulWidget {
 class _homemain extends State<homemain> {
   int _selectedindex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     mainmenu(),
-    myfavorite(),
+    const myfavorite(),
     shoppingcart(),
-    myprofile(),
-    Center(child: Text("Không có thông báo nào cả ....")),
+    const myprofile(),
+    NotificationsScreen(
+      globalList: globalList,
+    )
   ];
   PreferredSizeWidget? buildAppBar() {
     switch (_selectedindex) {
@@ -55,16 +58,6 @@ class _homemain extends State<homemain> {
                     return Wrap(
                       children: [
                         ListTile(
-                          leading: Icon(Icons.edit),
-                          title: Text("Edit my profile"),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.settings),
-                          title: Text("Settings"),
-                          onTap: () {},
-                        ),
-                        ListTile(
                           leading: Icon(Icons.logout, color: Colors.red),
                           title: Text(
                             "Logout",
@@ -90,60 +83,39 @@ class _homemain extends State<homemain> {
         );
 
       case 4:
-        return AppBar(
-          title: Text(
-            "Notification",
-            style: TextStyle(fontWeight: FontWeight.bold),
+        return PreferredSize(
+          preferredSize:
+              Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+          child: Container(
+            child: Center(
+              // Căn giữa nội dung
+              child: Text(
+                "Notification",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
           ),
-          centerTitle: true,
         );
 
       default:
         return PreferredSize(
           preferredSize:
-              Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
+              Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
           child: Container(
-            padding: EdgeInsets.only(
-                top: 40,
-                left: MediaQuery.of(context).size.width * 0.2,
-                right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Choose your food",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+            child: Center(
+              // Căn giữa nội dung
+              child: Text(
+                "Choose your food",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                Container(
-                  width: 50,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                        color: Colors.grey,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(15),
-                    color: Color.fromRGBO(255, 164, 81, 1),
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      // Thực hiện hành động khi bấm vào nút search
-                    },
-                    icon: Icon(
-                      Icons.search_sharp,
-                      size: 30,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         );

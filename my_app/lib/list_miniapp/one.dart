@@ -7,6 +7,8 @@ import 'apiservice/user.dart';
 import 'apiservice/api_service.dart';
 import 'three.dart';
 
+String globalEmail = "";
+
 // ignore: camel_case_types
 class login extends StatefulWidget {
   const login({super.key});
@@ -39,7 +41,9 @@ class _login extends State<login> {
 
       setState(() {
         message = response.data['message'];
+
         if (message == 'done') {
+          globalEmail = emailcontroller.text;
           message = " ";
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => homemain()));

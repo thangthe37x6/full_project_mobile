@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'apiservice/user.dart';
 import 'apiservice/api_service.dart';
 
+List<String> globalList = [];
+
 // ignore: camel_case_types
 class Sign_up extends StatefulWidget {
   const Sign_up({super.key});
@@ -21,6 +23,8 @@ class _Sign_up extends State<Sign_up> {
 
   late ApiClient regis;
   String mess = '';
+
+  bool isLoading = false; // Thêm biến này
 
   @override
   void initState() {
@@ -44,6 +48,10 @@ class _Sign_up extends State<Sign_up> {
     });
 
     if (emailerr == null && passworderr == null) {
+      setState(() {
+        isLoading = true; // Bật trạng thái loading
+      });
+
       try {
         final response = await regis.register(User(
           email: emailcontroll.text,
@@ -51,10 +59,12 @@ class _Sign_up extends State<Sign_up> {
         ));
 
         setState(() {
+          isLoading = false; // Tắt loading khi nhận được phản hồi
           mess = response.data.containsKey('message')
               ? response.data['message']
               : 'Đã xảy ra lỗi từ server';
           if (mess == "done") {
+            globalEmail = emailcontroll.text;
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => homemain()),
@@ -63,6 +73,7 @@ class _Sign_up extends State<Sign_up> {
         });
       } catch (e) {
         setState(() {
+          isLoading = false; // Tắt loading nếu có lỗi
           mess = "lỗi ${e.toString()} ";
         });
       }
@@ -75,6 +86,7 @@ class _Sign_up extends State<Sign_up> {
 
   String? emailerr;
   String? passworderr;
+
   void p_pw() {
     if (password.text.isEmpty || c_password.text.isEmpty) {
       setState(() {
@@ -87,7 +99,7 @@ class _Sign_up extends State<Sign_up> {
     }
   }
 
-  // ignore: non_constant_identifier_names
+// ignore: non_constant_identifier_names
   void p_c_pw() {
     if (c_password.text != password.text) {
       setState(() {
@@ -281,7 +293,12 @@ class _Sign_up extends State<Sign_up> {
                       borderRadius: BorderRadius.circular(15),
                       color: const Color.fromRGBO(52, 182, 233, 1)),
                   child: TextButton(
-                      onPressed: register, child: const Text("SIGN UP"))),
+                    onPressed: isLoading ? null : register,
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                            color: Colors.white) // Hiển thị loading
+                        : Text("SIGN UP"),
+                  )),
               TextButton(
                   onPressed: () {},
                   child: const Text(

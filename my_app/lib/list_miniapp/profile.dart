@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'one.dart';
+import 'dart:math';
 class myprofile extends StatefulWidget {
   const myprofile({super.key});
 
@@ -32,7 +33,7 @@ class _myprofile extends State<myprofile> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "thang",
+                globalEmail.split("@")[0],
                 style: TextStyle(
                     fontSize: 23,
                     color: Colors.black,
@@ -98,7 +99,7 @@ class _myprofile extends State<myprofile> {
                     width: 5,
                   ),
                   Text(
-                    "DANANG, VIETNAM",
+                    "Ở Đâu Được, VietNam",
                     style: TextStyle(fontSize: 19),
                   )
                 ],
@@ -119,7 +120,7 @@ class _myprofile extends State<myprofile> {
                     width: 5,
                   ),
                   Text(
-                    "conga@gmail.com",
+                    globalEmail,
                     style: TextStyle(fontSize: 19),
                   )
                 ],
@@ -140,7 +141,7 @@ class _myprofile extends State<myprofile> {
                     width: 5,
                   ),
                   Text(
-                    "0312389123471",
+                    "0${List.generate(10, (_) => Random().nextInt(10)).join()}",
                     style: TextStyle(fontSize: 19),
                   )
                 ],

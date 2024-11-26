@@ -24,6 +24,8 @@ class _contain1 extends State<contain1> {
 
   @override
   Widget build(BuildContext context) {
+    double maxwidth = MediaQuery.of(context).size.width;
+    double maxheight = MediaQuery.of(context).size.height;
     return Container(
       margin: EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
@@ -36,19 +38,19 @@ class _contain1 extends State<contain1> {
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
       ),
-      width: 150,
-      height: 200,
+      width: maxwidth * 0.4,
+      height: maxheight * 0.25,
       child: Stack(
         children: [
           Positioned(
-            top: 40,
-            left: 35,
+            top: maxheight * 0.05,
+            left: maxheight * 0.045,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
                 widget.image,
-                height: 85,
-                width: 85,
+                height: maxheight * 0.1,
+                width: maxheight * 0.1,
                 fit: BoxFit.cover,
               ),
             ),
@@ -88,8 +90,8 @@ class _contain1 extends State<contain1> {
                           name: widget.name,
                           image: widget.image))))),
           Positioned(
-              right: 15,
-              top: 15,
+              right: maxheight * 0.02,
+              top: maxheight * 0.02,
               child: InkWell(
                 onTap: () {
                   setState(() {
@@ -148,7 +150,8 @@ class _FirstMenuState extends State<FirstMenu> {
   String mess = "no food";
   Future<void> getData() async {
     try {
-      final response = await dio.get('https://api-new-xvht.onrender.com/api/data');
+      final response =
+          await dio.get('https://api-new-xvht.onrender.com/api/data');
       setState(() {
         items = response.data['data'];
       });
@@ -165,8 +168,10 @@ class _FirstMenuState extends State<FirstMenu> {
 
   @override
   Widget build(BuildContext context) {
+    double maxwidth = MediaQuery.of(context).size.width;
+    double maxheight = MediaQuery.of(context).size.height;
     return Container(
-        height: 249,
+        height: maxheight * 0.3,
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -192,7 +197,8 @@ class _secondMenuState extends State<secondMenu> {
   String mess = "no food";
   Future<void> getData() async {
     try {
-      final response = await dio.get('https://api-new-xvht.onrender.com/api/data');
+      final response =
+          await dio.get('https://api-new-xvht.onrender.com/api/data');
       setState(() {
         items = response.data['restaurant'];
       });
@@ -226,23 +232,45 @@ class _secondMenuState extends State<secondMenu> {
   }
 }
 
-class container2 extends StatelessWidget {
+List<Map<String, String>> globalList = [];
+
+class container2 extends StatefulWidget {
   final String name;
   final String address;
   final double acountstar;
   final int time;
   final String image;
-  const container2(
-      {Key? key,
-      required this.name,
-      required this.address,
-      required this.acountstar,
-      required this.time,
-      required this.image})
-      : super(key: key);
+
+  const container2({
+    Key? key,
+    required this.name,
+    required this.address,
+    required this.acountstar,
+    required this.time,
+    required this.image,
+  }) : super(key: key);
 
   @override
+  State<container2> createState() => _container2State();
+}
+
+class _container2State extends State<container2> {
+  @override
   Widget build(BuildContext context) {
+    double maxwidth = MediaQuery.of(context).size.width;
+    double maxheight = MediaQuery.of(context).size.height;
+    void addToGlobalList() {
+      // Lấy giờ hiện tại
+      String currentTime = DateTime.now().toString();
+
+      // Thêm thông tin vào danh sách global
+      globalList.add({
+        'name': widget.name,
+        'address': widget.address,
+        'time': currentTime, // Lưu thời gian hiện tại
+      });
+    }
+
     return Container(
       child: Stack(
         children: [
@@ -252,18 +280,18 @@ class container2 extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  image,
+                  widget.image,
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 140,
+                  height: maxheight * 0.17,
                 ),
               ),
               Text(
-                address,
+                widget.address,
                 style: TextStyle(fontSize: 20),
               ),
               Text(
-                name,
+                widget.name,
                 style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
               Row(
@@ -278,7 +306,7 @@ class container2 extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text("${acountstar}")
+                      Text("${widget.acountstar}")
                     ],
                   ),
                   SizedBox(
@@ -297,7 +325,7 @@ class container2 extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    width: 15,
+                    width: maxheight * 0.05,
                   ),
                   Row(
                     children: [
@@ -308,15 +336,52 @@ class container2 extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text("${time} min")
+                      Text("${widget.time} min"),
                     ],
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
+          Positioned(
+              right: maxwidth * 0.001,
+              bottom: maxwidth * 0.05,
+              child: IconButton(
+                onPressed: () {
+                  addToGlobalList();
+                },
+                icon: Icon(Icons.list_alt),
+              ))
         ],
       ),
+    );
+  }
+}
+class NotificationsScreen extends StatelessWidget {
+  final List<Map<String, String>> globalList;
+
+  const NotificationsScreen({Key? key, required this.globalList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: globalList.isEmpty
+          ? Center(
+              child: ListTile(
+                title: Text("Không có thông báo nào cả..."),
+              ),
+            )
+          : ListView.builder(
+              itemCount: globalList.length,
+              itemBuilder: (context, index) {
+                final item = globalList[index];
+                return ListTile(
+                  leading: Icon(Icons.notification_important),
+                  title: Text(item['name'] ?? "No Name"),
+                  subtitle: Text("${item['address']} - ${item['time']}"),
+                );
+              },
+            ),
     );
   }
 }
